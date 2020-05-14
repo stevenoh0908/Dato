@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import os
 
 class Ui_LauncherWindow(object):
     def setupUi(self, LauncherWindow):
@@ -45,6 +45,10 @@ class Ui_LauncherWindow(object):
         self.verticalLayout.addWidget(self.pushButtonExit)
         LauncherWindow.setCentralWidget(self.centralwidget)
 
+        self.pushButtonTableManager.clicked.connect(self.buttonTableManagerClicked)
+        self.pushButtonImageManager.clicked.connect(self.buttonImageManagerClicked)
+        self.pushButtonExit.clicked.connect(self.buttonExitClicked)
+
         self.retranslateUi(LauncherWindow)
         QtCore.QMetaObject.connectSlotsByName(LauncherWindow)
 
@@ -56,6 +60,16 @@ class Ui_LauncherWindow(object):
         self.pushButtonImageManager.setText(_translate("LauncherWindow", "Image Manager"))
         self.pushButtonExit.setText(_translate("LauncherWindow", "Exit"))
 
+    def buttonTableManagerClicked(self):
+        os.system('python ./ui/tableManager.py')
+        pass
+
+    def buttonImageManagerClicked(self):
+        os.system('python ./ui/imageManager.py')
+        pass
+
+    def buttonExitClicked(self):
+        exit()
 
 if __name__ == "__main__":
     import sys
