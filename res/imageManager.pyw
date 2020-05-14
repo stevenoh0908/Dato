@@ -16,6 +16,7 @@ class Ui_imageManager(object):
         MainWindow.resize(800, 600)
         MainWindow.setMinimumSize(QtCore.QSize(400, 300))
         MainWindow.setBaseSize(QtCore.QSize(800, 600))
+        MainWindow.setWindowIcon(QtGui.QIcon('./img/logo.png'))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -101,6 +102,32 @@ class Ui_imageManager(object):
         self.actionOpenLogFile.setText(_translate("MainWindow", "Open Log File"))
         self.actionLogOption.setText(_translate("MainWindow", "Log Option"))
 
+    def actionOpenClicked(self):
+        pass
+
+    def actionCloseClicked(self):
+        pass
+
+    def actionUserOptionClicked(self):
+        pass
+
+    def actionactionUserHelpClicked(self):
+        pass
+
+    def actionLisenseClicked(self):
+        pass
+
+    def actionExitClicked(self):
+        pass
+
+    def actionOpen_Log_FileClicked(self):
+        pass
+
+    def actionConfigureLogClicked(self):
+        pass
+
+    def actionLogOptionClicked(self):
+        pass
 
 if __name__ == "__main__":
     import sys

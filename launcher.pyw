@@ -8,17 +8,19 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import os
+import subprocess
 
 class Ui_LauncherWindow(object):
     def setupUi(self, LauncherWindow):
         LauncherWindow.setObjectName("LauncherWindow")
-        LauncherWindow.resize(150, 200)
+        LauncherWindow.resize(400, 200)
+        LauncherWindow.setWindowIcon(QtGui.QIcon('./res/img/logo.png'))
         self.centralwidget = QtWidgets.QWidget(LauncherWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setPixmap(QtGui.QPixmap('./res/img/logo.png').scaledToWidth(200))
         font = QtGui.QFont()
         font.setFamily("Freestyle Script")
         self.label.setFont(font)
@@ -55,17 +57,16 @@ class Ui_LauncherWindow(object):
     def retranslateUi(self, LauncherWindow):
         _translate = QtCore.QCoreApplication.translate
         LauncherWindow.setWindowTitle(_translate("LauncherWindow", "Dato - Launcher"))
-        self.label.setText(_translate("LauncherWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:72pt; font-weight:600;\">Dato</span></p></body></html>"))
         self.pushButtonTableManager.setText(_translate("LauncherWindow", "Table Manager"))
         self.pushButtonImageManager.setText(_translate("LauncherWindow", "Image Manager"))
         self.pushButtonExit.setText(_translate("LauncherWindow", "Exit"))
 
     def buttonTableManagerClicked(self):
-        os.system('python ./ui/tableManager.py')
+        subprocess.Popen('pythonw ./res/tableManager.pyw', shell=True)
         pass
 
     def buttonImageManagerClicked(self):
-        os.system('python ./ui/imageManager.py')
+        subprocess.Popen('pythonw ./res/imageManager.pyw', shell=True)
         pass
 
     def buttonExitClicked(self):

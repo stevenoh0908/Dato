@@ -17,6 +17,7 @@ class Ui_license(object):
         LicenseWindow.setMinimumSize(QtCore.QSize(350, 250))
         LicenseWindow.setMaximumSize(QtCore.QSize(350, 250))
         LicenseWindow.setBaseSize(QtCore.QSize(350, 250))
+        LicenseWindow.setWindowIcon(QtGui.QIcon('./img/logo.png'))
         self.verticalLayout = QtWidgets.QVBoxLayout(LicenseWindow)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(LicenseWindow)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     LicenseWindow = QtWidgets.QWidget()
-    ui = Ui_LicenseWindow()
+    ui = Ui_license()
     ui.setupUi(LicenseWindow)
     LicenseWindow.show()
     sys.exit(app.exec_())
