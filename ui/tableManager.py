@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from ba2cc.ba2cc import BAManger, FileManager, DataManager, ExtremeManager
 
 
 class Ui_tableManager(object):
