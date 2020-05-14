@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>371</width>
-    <height>158</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>400</width>
+    <height>300</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dato - Image Manager</string>
@@ -34,7 +46,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>371</width>
+     <width>400</width>
      <height>18</height>
     </rect>
    </property>

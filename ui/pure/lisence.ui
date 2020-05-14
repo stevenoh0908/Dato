@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Lisence</class>
- <widget class="QWidget" name="Lisence">
+ <class>LisenceWindow</class>
+ <widget class="QWidget" name="LisenceWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>140</height>
+    <height>200</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>200</width>
-    <height>140</height>
+    <height>200</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>200</width>
-    <height>140</height>
+    <height>200</height>
    </size>
   </property>
   <property name="baseSize">
@@ -31,8 +31,8 @@
   <property name="windowTitle">
    <string>Dato - Lisence</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="2">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
