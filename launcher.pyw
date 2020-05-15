@@ -62,7 +62,7 @@ class Ui_LauncherWindow(object):
         self.pushButtonExit.setText(_translate("LauncherWindow", "Exit"))
 
     def buttonTableManagerClicked(self):
-        subprocess.Popen('pythonw ./res/tableManager.pyw', shell=True)
+        subprocess.Popen('pythonw ./res/csvManager.pyw', shell=True)
         pass
 
     def buttonImageManagerClicked(self):

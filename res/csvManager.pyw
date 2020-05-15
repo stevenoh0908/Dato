@@ -7,12 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 
 '''
-{ Dato - tableManager.pyw }
+{ Dato - csvManager.pyw }
 
 Dato is GUI Application for analyzing complex data, which is dedicated to GSHS Earth-Science Team,
 developed by Stephen Oh.
 
-Latest Modification Date: 2020-05-14 Thur, KST
+Latest Modification Date: 2020-05-15 Fri, KST
 Developed by Stephen Oh, Chief Developer of Trendous Development Alliance & Studio.Chem
 Email Address: stevenoh0908@gmail.com
 
@@ -26,7 +26,7 @@ from ba2cc.ba2cc import BAManager, FileManager, DataManager, ExtremeManager
 import subprocess, webbrowser
 
 
-class Ui_tableManager(object):
+class Ui_csvManager(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -183,7 +183,7 @@ class Ui_tableManager(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Dato - Table Manager"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Dato - CSV Manager"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuAnalyze.setTitle(_translate("MainWindow", "Analyze"))
@@ -677,7 +677,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_tableManager()
+    ui = Ui_csvManager()
     ui.setupUi(MainWindow)
     ui.setupVariables()
     MainWindow.show()

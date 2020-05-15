@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import subprocess
 
 class Ui_imageManager(object):
     def setupUi(self, MainWindow):
@@ -21,9 +21,8 @@ class Ui_imageManager(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.treeWidget = QtWidgets.QTreeWidget(self.centralwidget)
+        self.treeWidget = QtWidgets.QTreeView(self.centralwidget)
         self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.headerItem().setText(0, "1")
         self.gridLayout.addWidget(self.treeWidget, 0, 0, 1, 1)
         self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
         self.graphicsView.setObjectName("graphicsView")
@@ -45,20 +44,16 @@ class Ui_imageManager(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionOpen = QtWidgets.QAction(MainWindow)
         self.actionOpen.setObjectName("actionOpen")
-        self.actionClose = QtWidgets.QAction(MainWindow)
-        self.actionClose.setObjectName("actionClose")
         self.actionUserOption = QtWidgets.QAction(MainWindow)
         self.actionUserOption.setObjectName("actionUserOption")
         self.actionUserHelp = QtWidgets.QAction(MainWindow)
         self.actionUserHelp.setObjectName("actionUserHelp")
-        self.actionLisense = QtWidgets.QAction(MainWindow)
-        self.actionLisense.setObjectName("actionLisense")
+        self.actionLicense = QtWidgets.QAction(MainWindow)
+        self.actionLicense.setObjectName("actionLicense")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
         self.actionOpen_Log_File = QtWidgets.QAction(MainWindow)
         self.actionOpen_Log_File.setObjectName("actionOpen_Log_File")
-        self.actionLog_Options = QtWidgets.QAction(MainWindow)
-        self.actionLog_Options.setObjectName("actionLog_Options")
         self.actionConfigureLog = QtWidgets.QAction(MainWindow)
         self.actionConfigureLog.setObjectName("actionConfigureLog")
         self.actionOpenLogFile = QtWidgets.QAction(MainWindow)
@@ -66,7 +61,6 @@ class Ui_imageManager(object):
         self.actionLogOption = QtWidgets.QAction(MainWindow)
         self.actionLogOption.setObjectName("actionLogOption")
         self.menuFile.addAction(self.actionOpen)
-        self.menuFile.addAction(self.actionClose)
         self.menuLog.addAction(self.actionConfigureLog)
         self.menuLog.addSeparator()
         self.menuLog.addAction(self.actionOpenLogFile)
@@ -74,12 +68,23 @@ class Ui_imageManager(object):
         self.menuOption.addAction(self.actionUserOption)
         self.menuOption.addSeparator()
         self.menuOption.addAction(self.actionUserHelp)
-        self.menuOption.addAction(self.actionLisense)
+        self.menuOption.addAction(self.actionLicense)
         self.menuOption.addSeparator()
         self.menuOption.addAction(self.actionExit)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuLog.menuAction())
         self.menubar.addAction(self.menuOption.menuAction())
+
+        self.actionOpen.triggered.connect(self.actionOpenClicked)
+        self.actionUserOption.triggered.connect(self.actionUserOptionClicked)
+        self.actionUserHelp.triggered.connect(self.actionUserHelpClicked)
+        self.actionLicense.triggered.connect(self.actionLicenseClicked)
+        self.actionExit.triggered.connect(self.actionExitClicked)
+        self.actionOpen_Log_File.triggered.connect(self.actionOpen_Log_FileClicked)
+        self.actionConfigureLog.triggered.connect(self.actionConfigureLogClicked)
+        self.actionLogOption.triggered.connect(self.actionLogOptionClicked)
+
+        self.treeWidget.doubleClicked.connect(self.treeItemDoubleClicked)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -90,34 +95,52 @@ class Ui_imageManager(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuLog.setTitle(_translate("MainWindow", "Log"))
         self.menuOption.setTitle(_translate("MainWindow", "Option"))
-        self.actionOpen.setText(_translate("MainWindow", "Open Image"))
-        self.actionClose.setText(_translate("MainWindow", "Close Image"))
+        self.actionOpen.setText(_translate("MainWindow", "Open Directory"))
+        self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionUserOption.setText(_translate("MainWindow", "User Option"))
         self.actionUserHelp.setText(_translate("MainWindow", "Help"))
-        self.actionLisense.setText(_translate("MainWindow", "Lisence"))
+        self.actionLicense.setText(_translate("MainWindow", "Licence"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionOpen_Log_File.setText(_translate("MainWindow", "Open Log File"))
-        self.actionLog_Options.setText(_translate("MainWindow", "Log Options"))
         self.actionConfigureLog.setText(_translate("MainWindow", "Configure Log"))
         self.actionOpenLogFile.setText(_translate("MainWindow", "Open Log File"))
-        self.actionLogOption.setText(_translate("MainWindow", "Log Option"))
+        self.actionLogOption.setText(_translate("MainWindow", "Log Options"))
 
-    def actionOpenClicked(self):
+    def initVariables(self):
+        self.directoryModel = QtWidgets.QFileSystemModel()
+        self.directoryModel.setRootPath(QtCore.QDir.currentPath())
+        self.treeWidget.setModel(self.directoryModel)
+        self.treeWidget.setRootIndex(self.directoryModel.index(QtCore.QDir.currentPath()))
+        self.treeWidget.setWindowTitle("Dircetory...")
+
+    def treeItemDoubleClicked(self, index):
+        self.filepath = index.model().filePath(index)
+        scene = QtWidgets.QGraphicsScene()
+        scene.addPixmap(QtGui.QPixmap(self.filepath))
+        self.graphicsView.setScene(scene)
+        self.graphicsView.fitInView(scene.sceneRect(), QtCore.Qt.KeepAspectRatio)
+        self.graphicsView.show()
         pass
 
-    def actionCloseClicked(self):
+    def actionOpenClicked(self):
+        directory = str(QtWidgets.QFileDialog.getExistingDirectory(MainWindow, "Open Directory"))
+        self.directoryModel.setRootPath(directory)
+        self.treeWidget.setModel(self.directoryModel)
+        self.treeWidget.setRootIndex(self.directoryModel.index(directory))
         pass
 
     def actionUserOptionClicked(self):
         pass
 
-    def actionactionUserHelpClicked(self):
+    def actionUserHelpClicked(self):
         pass
 
-    def actionLisenseClicked(self):
+    def actionLicenseClicked(self):
+        subprocess.Popen('pythonw license.pyw', shell=True)
         pass
 
     def actionExitClicked(self):
+        exit()
         pass
 
     def actionOpen_Log_FileClicked(self):
@@ -135,5 +158,6 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_imageManager()
     ui.setupUi(MainWindow)
+    ui.initVariables()
     MainWindow.show()
     sys.exit(app.exec_())
