@@ -95,6 +95,10 @@ class Ui_tableManager(object):
         self.actionLicense.setObjectName("actionLicense")
         self.menuUser_Option = QtWidgets.QMenu(self.menuOption)
         self.menuUser_Option.setObjectName("actionUser_Option")
+        self.actionCategory1 = QtWidgets.QAction(MainWindow)
+        self.actionCategory1.setObjectName("actionCategory1")
+        self.actionCategory2 = QtWidgets.QAction(MainWindow)
+        self.actionCategory2 = QtWidgets.QAction(MainWindow)
         self.actionStep = QtWidgets.QAction(MainWindow)
         self.actionStep.setObjectName("actionStep")
         self.actionDisplayMode = QtWidgets.QAction(MainWindow)
@@ -128,6 +132,9 @@ class Ui_tableManager(object):
         self.menuAnalyze.addAction(self.actionDisplayBorderDistributionChart)
         self.menuAnalyze.addSeparator()
         self.menuAnalyze.addAction(self.menuCalculateBorder.menuAction())
+        self.menuUser_Option.addAction(self.actionCategory1)
+        self.menuUser_Option.addAction(self.actionCategory2)
+        self.menuUser_Option.addSeparator()
         self.menuUser_Option.addAction(self.actionStep)
         self.menuUser_Option.addAction(self.actionDisplayMode)
         self.menuUser_Option.addAction(self.actionOffset)
@@ -161,6 +168,8 @@ class Ui_tableManager(object):
         self.actionSignedMeanBorderAlgorithm.triggered.connect(self.actionSignedMeanBorderAlgorithmClicked)
         self.actionUnsignedMeanBorderAlgorithm.triggered.connect(self.actionUnsignedMeanBorderAlgorithmClicked)
         self.actionLicense.triggered.connect(self.actionLicenseClicked)
+        self.actionCategory1.triggered.connect(self.actionCategory1Clicked)
+        self.actionCategory2.triggered.connect(self.actionCategory2Clicked)
         self.actionStep.triggered.connect(self.actionStepClicked)
         self.actionDisplayMode.triggered.connect(self.actionDisplayModeClicked)
         self.actionOffset.triggered.connect(self.actionOffsetClicked)
@@ -204,6 +213,8 @@ class Ui_tableManager(object):
         self.actionUnsignedMeanBorderAlgorithm.setText(_translate("MainWindow", "Unsigned Mean Border Algorithm"))
         self.actionLicense.setText(_translate("MainWindow", "License"))
         self.menuUser_Option.setTitle(_translate("MainWindow", "Option"))
+        self.actionCategory1.setText(_translate("MainWindow", "Category 1 Name"))
+        self.actionCategory2.setText(_translate("MainWindow", "Category 2 Name"))
         self.actionStep.setText(_translate("MainWindow", "Border Step"))
         self.actionDisplayMode.setText(_translate("MainWindow", "Chart Display Mode"))
         self.actionOffset.setText(_translate("MainWindow", "Extreme Offset"))
@@ -216,11 +227,14 @@ class Ui_tableManager(object):
         self.BORDER_CALCULATED = False
         self.CLEARED_EXTREMES = False
         self.filename = None
+        self.catname1 = 'Category 1'
+        self.catname2 = 'Category 2'
         self.step = 0.1
         self.offset = 10
         self.border = None
         self.option = BAManager.OPTION_UNLAYERED
         self.updateStatusBar()
+        self.updateTableLabel()
 
     def updateStatusBar(self):
         self.statusbar.showMessage(
@@ -232,6 +246,10 @@ class Ui_tableManager(object):
             'Offset : ' + str(self.offset) + ' | ' +
             ('Unlayered Display' if self.option == BAManager.OPTION_UNLAYERED else 'Layered Display'))
         pass
+
+    def updateTableLabel(self):
+        self.tableWidget.setHorizontalHeaderLabels([self.catname1, self.catname2])
+        pass        
     
     def tableWidgetcellChanged(self):
         self.EDITED = True
@@ -253,6 +271,7 @@ class Ui_tableManager(object):
         self.SAVED = False
         self.CLEARED_EXTREMES = False
         self.updateStatusBar()
+        self.updateTableLabel()
         pass
 
     def actionOpenClicked(self):
@@ -265,6 +284,9 @@ class Ui_tableManager(object):
         if self.filename:
             self.fileManager = FileManager(self.filename)
             self.cat1, self.cat2 = self.fileManager.loadData()
+            if self.cat1 == None and self.cat2 == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Reading Error!", "There was error with opening a file. Please check your target file it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
             self.tableWidget.setRowCount(len(self.cat1) if len(self.cat1) >= len(self.cat2) else len(self.cat2))
             for row in range(0, (len(self.cat1) if len(self.cat1) >= len(self.cat2) else len(self.cat2)), 1):
                 self.tableWidget.setItem(row,0, QtWidgets.QTableWidgetItem(str(self.cat1[row]) if not len(str(self.cat1[row])) == 0 else ''))
@@ -279,12 +301,36 @@ class Ui_tableManager(object):
 
     def actionSaveClicked(self):
         if not self.filename:
-            self.filename = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Save File', './', 'CSV Files(*.csv)')[0]
+            self.filename = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Save File', './', 'CSV Files(*.csv)')[0]
             pass
         self.fileManager = FileManager(self.filename)
         cat1 = []
         cat2 = []
         for row in range(0, self.tableWidget.rowCount(), 1):
+            if self.tableWidget.item(row, 0) == None and self.tableWidget.item(row, 1) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
+            if self.tableWidget.item(row, 0) == None and row+1 < self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 0) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
+            if self.tableWidget.item(row, 1) == None and row+1< self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 1) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
+            if not self.tableWidget.item(row, 0) == None and not self.tableWidget.item(row, 1) == None:
+                if self.tableWidget.item(row, 0).text() == '' and self.tableWidget.item(row, 1).text() == '':
+                    resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                    return
+                pass
+            if not self.tableWidget.item(row, 0) == None and not self.tableWidget.item(row+1, 0) == None:
+                if self.tableWidget.item(row, 0).text() == '' and row+1 < self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 0).text() == '':
+                    resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                    return
+                pass
+            if not self.tableWidget.item(row, 1) == None and not self.tableWidget.item(row+1, 1) == None:
+                if self.tableWidget.item(row, 1).text() == '' and row+1< self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 1).text() == '':
+                    resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                    return
+                pass
             cat1.append(self.tableWidget.item(row, 0).text() if not self.tableWidget.item(row, 0) == None else '')
             cat2.append(self.tableWidget.item(row, 1).text() if not self.tableWidget.item(row, 1) == None else '')
             pass
@@ -296,11 +342,20 @@ class Ui_tableManager(object):
         pass
 
     def actionSave_AsClicked(self):
-        self.filename = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Save File As', './', 'CSV Files(*.csv)')[0]
+        self.filename = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Save File As', './', 'CSV Files(*.csv)')[0]
         self.fileManager = FileManager(self.filename)
         cat1 = []
         cat2 = []
         for row in range(0, self.tableWidget.rowCount(), 1):
+            if self.tableWidget.item(row, 0) == None and self.tableWidget.item(row, 1) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
+            if self.tableWidget.item(row, 0) == None and row+1 < self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 0) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
+            if self.tableWidget.item(row, 1) == None and row+1< self.tableWidget.rowCount() and not self.tableWidget.item(row+1, 1) == None:
+                resp = QtWidgets.QMessageBox.warning(MainWindow, "File Saving Error!", "There was error with saving a file. Please check your table it doesn't have any in-middle blank.", (QtWidgets.QMessageBox.Ok))
+                return
             cat1.append(self.tableWidget.item(row, 0).text() if not self.tableWidget.item(row, 0) == None else '')
             cat2.append(self.tableWidget.item(row, 1).text() if not self.tableWidget.item(row, 1) == None else '')
             pass
@@ -422,6 +477,8 @@ class Ui_tableManager(object):
             self.fileManager = FileManager(self.filename)
             cat1, cat2 = self.fileManager.loadData()
             manager = BAManager(cat1, cat2)
+            manager.setCategoryName(1, self.catname1)
+            manager.setCategoryName(2, self.catname2)
             manager.displayDataInChart(self.option)
             pass
         pass
@@ -443,6 +500,8 @@ class Ui_tableManager(object):
             cat1, cat2 = self.fileManager.loadData()
             manager = BAManager(cat1, cat2)
             manager.border = self.border
+            manager.setCategoryName(1, self.catname1)
+            manager.setCategoryName(2, self.catname2)
             manager.displayBorderInChart(self.option)
             pass
         pass
@@ -549,6 +608,26 @@ class Ui_tableManager(object):
 
     def actionLicenseClicked(self):
         subprocess.Popen('pythonw license.pyw', shell=True)
+        pass
+
+    def actionCategory1Clicked(self):
+        name, ok = QtWidgets.QInputDialog.getText(MainWindow,'Category 1 Name Option', 'Input Name of Category 1.')
+        if ok:
+            if len(name) > 0:
+                self.catname1 = name
+                pass
+            self.updateTableLabel()
+            pass
+        pass
+
+    def actionCategory2Clicked(self):
+        name, ok = QtWidgets.QInputDialog.getText(MainWindow, 'Category 2 Name Option', 'Input Name of Category 2.')
+        if ok:
+            if len(name) > 0:
+                self.catname2 = name
+                pass
+            self.updateTableLabel()
+            pass
         pass
 
     def actionStepClicked(self):
