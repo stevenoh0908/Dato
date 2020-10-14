@@ -35,7 +35,7 @@
  
  우선 프로그램을 먼저 설치하도록 합시다. 다음의 과정을 따르기 바랍니다.<br>
  1. [이 링크](https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe)를 통해서 python 3.7을 컴퓨터에 설치한다. Add Python to Path 체크박스를 체크하고 설치하기 바랍니다.
- 2. [이 링크]()로 분석 프로그램을 다운받읍시다. 바탕화면에 폴더의 압축을 풀어주도록 합시다.
+ 2. [이 링크](https://github.com/stevenoh0908/chani-analysis/archive/main.zip)로 분석 프로그램을 다운받읍시다. 바탕화면에 폴더의 압축을 풀어주도록 합시다.
  3. cmd(명령 프롬프트)를 실행해서, 다음의 명령을 칩시다. 'pip install matplotlib' 엔터를 치세요.
  4. 설치가 끝나고 노란색 글씨가 뜨면, cmd 창을 닫고, 아까 풀어둔 폴더로 들어갑시다.
  5. 폴더 안에는 data.csv 파일과 창의재단분석.py 파일이 있을 것입니다. data.csv 파일을 열어서 우선 제1열에 Straight형의 연흔 곡률 지수의 데이터를 넣고, 제2열에 Sinuous형의 연흔 곡률 지수 데이터를 넣읍시다. 저장하세요.
